@@ -1,3 +1,4 @@
+//packages
 var express = require('express');
 var app = express();
 var port = process.env.PORT || 8000;
@@ -8,21 +9,27 @@ var router = express.Router();
 var appRoutes = require('./Back-end/routes/api')(router);
 var path = require('path');
 
+//middleware
 app.use(morgan('dev'));
 app.use(bodyParser.json()); // for parsing application/json
-app.use(bodyParser.urlencoded({extended:true}));
+app.use(bodyParser.urlencoded({
+    extended: true
+}));
 app.use(express.static(__dirname + '/Front-end'));
-app.use('/api',appRoutes);
+app.use('/api', appRoutes);
 
-mongoose.connect('mongodb://localhost:27017/tpr', function(err){
-    if(err) {
+//MongoDB connection
+mongoose.connect('mongodb://localhost:27017/tpr', function (err) {
+    if (err) {
         console.log('Not connected to the MongoDB, Err:' + err);
-    }else {
+    } else {
         console.log('Successfully connected to MongoDB')
     }
 })
 
-app.get('*',function(req,res){
+
+//Server port
+app.get('*', function (req, res) {
     res.sendFile(path.join(__dirname + '/Front-end/app/views/index.html'));
 });
 
